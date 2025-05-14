@@ -1,5 +1,4 @@
 <?php
-// src/Controller/FactureController.php
 
 namespace App\Controller;
 
@@ -10,11 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FactureController extends AbstractController
 {
-    // Existing route to view a single facture
     #[Route('/facture/{id}', name: 'facture_view')]
     public function view($id)
 {
-    // Mock complet
     $facture = [
         'id' => $id,
         'amount' => 100,
@@ -27,13 +24,9 @@ class FactureController extends AbstractController
         'facture' => $facture
     ]);
 }
-
-
-    // New route for listing all factures
     #[Route('/factures', name: 'factures')]
     public function list()
     {
-        // Mock data for factures
         $factures = [
     [
         'id' => 1,
@@ -60,19 +53,16 @@ class FactureController extends AbstractController
 public function add(Request $request)
 {
     if ($request->isMethod('POST')) {
-        // Normally you would persist the data
         $this->addFlash('success', 'Facture ajoutée avec succès.');
         return $this->redirectToRoute('factures');
     }
 
-    // ✅ Make sure you're using render()
     return $this->render('page/factures/add.html.twig');
 }
 
 #[Route('/facture/edit/{id}', name: 'facture_edit')]
 public function edit($id, Request $request)
 {
-    // Facture simulée
     $facture = ['id' => $id, 'numero' => 'F123', 'date' => new \DateTime(), 'amount' => 250, 'etat' => 'payee', 'note' => 'RAS'];
 
     if ($request->isMethod('POST')) {

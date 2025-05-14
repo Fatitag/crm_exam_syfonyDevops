@@ -5,10 +5,8 @@ security:
             security: false
 
         main:
-            # Disable security for the app entirely for now
             security: false
 
-    # Access control: Allow everything for now
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/dashboard, roles: IS_AUTHENTICATED_ANONYMOUSLY }

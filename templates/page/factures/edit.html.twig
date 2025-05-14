@@ -8,7 +8,6 @@
 
     <div class="card p-4 shadow" style="max-width: 600px; margin: 0 auto;">
         <form method="post" action="{{ path('facture_edit', {'id': facture.id}) }}">
-            <!-- Display the invoice ID, but do not allow editing -->
             <div class="mb-3">
                 <label for="numero" class="form-label" style="color: #1689b9;">Invoice Number</label>
                 <input type="text" id="numero" name="numero" class="form-control form-control-sm" value="{{ facture.id }}" readonly>
@@ -33,8 +32,6 @@
                 <label for="note" class="form-label" style="color: #1689b9;">Note</label>
                 <textarea id="note" name="note" class="form-control form-control-sm">{{ facture.note }}</textarea>
             </div>
-            
-            <!-- Centering the button -->
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn" style="background-color: #1689b9; color: white;"><i class="bi bi-save"></i> Update</button>
             </div>

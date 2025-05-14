@@ -1,5 +1,4 @@
 <?php
-// src/Controller/ClientsController.php
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +11,6 @@ class ClientsController extends AbstractController
     #[Route('/clients', name: 'clients')]
     public function index(): Response
     {
-        // Liste simulée de clients avec les nouvelles informations
         $clients = [
             [
                 'id' => 1,
@@ -52,14 +50,12 @@ class ClientsController extends AbstractController
     #[Route('/clients/add', name: 'client_add')]
     public function add(): Response
     {
-        // Add logic for handling client creation here
         return $this->render('page/clients/add.html.twig');
     }
 
     #[Route('/client/{id}/edit', name: 'client_edit')]
     public function edit(Request $request, $id): Response
     {
-        // Simulate a client (replace with actual DB query later)
         $client = [
             'id' => $id,
             'nom' => 'Dupont',
@@ -71,7 +67,6 @@ class ClientsController extends AbstractController
             'pays' => 'Maroc',
         ];
 
-        // Handle form submission
         if ($request->isMethod('POST')) {
             $client['nom'] = $request->request->get('nom');
             $client['prenom'] = $request->request->get('prenom');
@@ -81,13 +76,11 @@ class ClientsController extends AbstractController
             $client['ville'] = $request->request->get('ville');
             $client['pays'] = $request->request->get('pays');
 
-            // Here, you could save the data to the database
 
             $this->addFlash('success', 'Client updated successfully!');
             return $this->redirectToRoute('clients');
         }
 
-        // Render the form with current client data
         return $this->render('page/clients/edit.html.twig', [
             'client' => $client
         ]);
@@ -96,7 +89,6 @@ class ClientsController extends AbstractController
     #[Route('/client/{id}/delete', name: 'client_delete')]
     public function delete($id): Response
     {
-        // Logic for deleting the client goes here
         $this->addFlash('success', 'Client deleted successfully!');
         return $this->redirectToRoute('clients');
     }
@@ -104,7 +96,6 @@ class ClientsController extends AbstractController
     #[Route('/client/{id}', name: 'client_view')]
     public function view($id): Response
     {
-        // Simulate retrieving a client and its invoices (replace with actual DB query)
         $client = [
             'id' => $id,
             'nom' => 'Dupont',
