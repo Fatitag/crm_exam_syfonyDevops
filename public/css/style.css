@@ -1,0 +1,72 @@
+/* Base Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff; /* Light sky blue background */
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Header and Footer Styling */
+header {
+    background-color: #ffffff;
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    background-color: #ffffff;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* Logo and Title */
+h1 {
+    color: #00bfff; /* Sky blue color */
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+/* Content Styling */
+h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Buttons */
+button {
+    background-color: #00bfff; /* Sky blue color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #009acd;
+}
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    footer {
+        font-size: 0.8rem;
+    }
+}
