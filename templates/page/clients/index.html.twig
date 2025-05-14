@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 style="color: #1689b9;">Client List</h2> <!-- Blue for heading -->
+            <a href="{{ path('client_add') }}" class="btn" style="background-color: #1689b9; color: white;">
+                <i class="bi bi-plus-circle"></i> Add a Client
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" style="background-color: #fefefe;">
+                <thead style="background-color: #1689b9; color: white;"> <!-- Header with blue background -->
+                    <tr>
+                        <th>ID</th>
+                        <th>Manager's Last Name</th>
+                        <th>Company Name</th>
+                        <th>Phone Number</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr style="background-color: #edf8ff;"> <!-- Light blue background for rows -->
+                            <td>{{ client.id }}</td>
+                            <td>{{ client.nom }} {{ client.prenom }}</td>
+                            <td>{{ client.raison_sociale }}</td>
+                            <td>{{ client.telephone }}</td>
+                            <td>{{ client.adresse }}</td>
+                            <td>{{ client.ville }}</td>
+                            <td>{{ client.pays }}</td>
+                            <td>
+                                <a href="{{ path('client_view', {'id': client.id}) }}" 
+                                    class="btn btn-sm" style="background-color: #0a507c; color: white;" 
+                                    title="View Client">
+                                        <i class="bi bi-eye"></i>
+                                </a>
+
+                                <a href="{{ path('client_edit', {'id': client.id}) }}" class="btn btn-sm" style="background-color: #b5b8c4; color: white;" title="Edit Client">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{{ path('client_delete', {'id': client.id}) }}" class="btn btn-sm" style="background-color: #d9534f; color: white;" title="Delete Client" onclick="return confirm('Are you sure you want to delete this client?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

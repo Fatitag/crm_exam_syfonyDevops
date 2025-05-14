@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invoice List{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: #1689b9;"><i class="bi bi-receipt"></i> Invoice List</h2>
+        <a href="{{ path('facture_add') }}" class="btn" style="background-color: #1689b9; color: white;">
+            <i class="bi bi-plus-circle"></i> Add Invoice
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead style="background-color: #edf8ff;">
+            <tr>
+                <th>Invoice Number</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for facture in factures %}
+            <tr>
+                <td>{{ facture.id }}</td>
+                <td>{{ facture.date|date('d/m/Y') }}</td>
+                <td>{{ facture.amount }} MAD</td>
+                <td>
+                    {% if facture.etat == 'payee' %}
+                        <span class="badge" style="background-color: #0a507c; color: white;">Paid</span>
+                    {% elseif facture.etat == 'partiellement' %}
+                        <span class="badge" style="background-color: #b5b8c4; color: black;">Partially Paid</span>
+                    {% else %}
+                        <span class="badge" style="background-color: #f44336; color: white;">Unpaid</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('facture_view', {'id': facture.id}) }}" class="btn btn-sm" style="background-color: #1689b9; color: white;"><i class="bi bi-eye"></i></a>
+                    <a href="{{ path('facture_edit', {'id': facture.id}) }}" class="btn btn-sm" style="background-color: #fefefe; color: #0a507c;"><i class="bi bi-pencil"></i></a>
+                    <a href="{{ path('facture_delete', {'id': facture.id}) }}" class="btn btn-sm" style="background-color: #f44336; color: white;" onclick="return confirm('Delete this invoice?')"><i class="bi bi-trash"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

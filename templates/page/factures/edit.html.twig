@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Invoice{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 style="color: #0a507c;" class="mb-4 text-center"><i class="bi bi-pencil-square"></i> Edit Invoice #{{ facture.id }}</h2>
+
+    <div class="card p-4 shadow" style="max-width: 600px; margin: 0 auto;">
+        <form method="post" action="{{ path('facture_edit', {'id': facture.id}) }}">
+            <!-- Display the invoice ID, but do not allow editing -->
+            <div class="mb-3">
+                <label for="numero" class="form-label" style="color: #1689b9;">Invoice Number</label>
+                <input type="text" id="numero" name="numero" class="form-control form-control-sm" value="{{ facture.id }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label" style="color: #1689b9;">Date</label>
+                <input type="date" id="date" name="date" class="form-control form-control-sm" value="{{ facture.date|date('Y-m-d') }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label" style="color: #1689b9;">Amount (MAD)</label>
+                <input type="number" id="amount" name="amount" class="form-control form-control-sm" value="{{ facture.amount }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="etat" class="form-label" style="color: #1689b9;">Status</label>
+                <select id="etat" name="etat" class="form-select form-select-sm" required>
+                    <option value="payee" {% if facture.etat == 'payee' %}selected{% endif %}>Paid</option>
+                    <option value="partiellement" {% if facture.etat == 'partiellement' %}selected{% endif %}>Partially Paid</option>
+                    <option value="non_payee" {% if facture.etat == 'non_payee' %}selected{% endif %}>Unpaid</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="note" class="form-label" style="color: #1689b9;">Note</label>
+                <textarea id="note" name="note" class="form-control form-control-sm">{{ facture.note }}</textarea>
+            </div>
+            
+            <!-- Centering the button -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn" style="background-color: #1689b9; color: white;"><i class="bi bi-save"></i> Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

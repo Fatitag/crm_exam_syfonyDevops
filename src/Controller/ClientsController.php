@@ -1,48 +1,127 @@
 <?php
-// src/Controller/ClientController.php
+// src/Controller/ClientsController.php
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ClientsController extends AbstractController
 {
     #[Route('/clients', name: 'clients')]
-    public function clients()
+    public function index(): Response
     {
-        // Fetch clients from the database or create mock data
+        // Liste simulée de clients avec les nouvelles informations
         $clients = [
-            ['id' => 1, 'name' => 'John Doe', 'email' => 'john.doe@example.com'],
-            ['id' => 2, 'name' => 'Jane Smith', 'email' => 'jane.smith@example.com'],
-            // Add more clients here
+            [
+                'id' => 1,
+                'nom' => 'John',
+                'prenom' => 'Doe',
+                'raison_sociale' => 'Acme Corp',
+                'telephone' => '0123456789',
+                'adresse' => '123 Rue Principale',
+                'ville' => 'Oujda',
+                'pays' => 'Maroc',
+                'factures' => [
+                    ['id' => 101, 'montant' => 1500, 'date' => '2024-05-10'],
+                    ['id' => 102, 'montant' => 2300, 'date' => '2024-06-15'],
+                ]
+            ],
+            [
+                'id' => 2,
+                'nom' => 'Jane',
+                'prenom' => 'Smith',
+                'raison_sociale' => 'Smith Enterprises',
+                'telephone' => '0987654321',
+                'adresse' => '456 Rue Exemple',
+                'ville' => 'Oujda',
+                'pays' => 'Maroc',
+                'factures' => [
+                    ['id' => 103, 'montant' => 1800, 'date' => '2024-05-20'],
+                    ['id' => 104, 'montant' => 2500, 'date' => '2024-07-01'],
+                ]
+            ],
         ];
 
-        return $this->render('page/clients.html.twig', [
+        return $this->render('page/clients/index.html.twig', [
             'clients' => $clients
         ]);
     }
 
-    #[Route('/client/{id}/edit', name: 'client_edit')]
-    public function edit($id)
+    #[Route('/clients/add', name: 'client_add')]
+    public function add(): Response
     {
-        // Edit logic here
+        // Add logic for handling client creation here
+        return $this->render('page/clients/add.html.twig');
+    }
 
-        return $this->render('client/edit.html.twig');
+    #[Route('/client/{id}/edit', name: 'client_edit')]
+    public function edit(Request $request, $id): Response
+    {
+        // Simulate a client (replace with actual DB query later)
+        $client = [
+            'id' => $id,
+            'nom' => 'Dupont',
+            'prenom' => 'Jean',
+            'raison_sociale' => 'Entreprise Dupont SARL',
+            'telephone' => '0600123456',
+            'adresse' => '12 rue des Lilas',
+            'ville' => 'Oujda',
+            'pays' => 'Maroc',
+        ];
+
+        // Handle form submission
+        if ($request->isMethod('POST')) {
+            $client['nom'] = $request->request->get('nom');
+            $client['prenom'] = $request->request->get('prenom');
+            $client['raison_sociale'] = $request->request->get('raison_sociale');
+            $client['telephone'] = $request->request->get('telephone');
+            $client['adresse'] = $request->request->get('adresse');
+            $client['ville'] = $request->request->get('ville');
+            $client['pays'] = $request->request->get('pays');
+
+            // Here, you could save the data to the database
+
+            $this->addFlash('success', 'Client updated successfully!');
+            return $this->redirectToRoute('clients');
+        }
+
+        // Render the form with current client data
+        return $this->render('page/clients/edit.html.twig', [
+            'client' => $client
+        ]);
     }
 
     #[Route('/client/{id}/delete', name: 'client_delete')]
-    public function delete($id)
+    public function delete($id): Response
     {
-        // Delete client logic here
-
+        // Logic for deleting the client goes here
+        $this->addFlash('success', 'Client deleted successfully!');
         return $this->redirectToRoute('clients');
     }
 
-    #[Route('/client/{id}/factures', name: 'client_factures')]
-    public function factures($id)
+    #[Route('/client/{id}', name: 'client_view')]
+    public function view($id): Response
     {
-        // Fetch factures for the client
+        // Simulate retrieving a client and its invoices (replace with actual DB query)
+        $client = [
+            'id' => $id,
+            'nom' => 'Dupont',
+            'prenom' => 'Jean',
+            'raison_sociale' => 'Entreprise Dupont SARL',
+            'telephone' => '0600123456',
+            'adresse' => '12 rue des Lilas',
+            'ville' => 'Oujda',
+            'pays' => 'Maroc',
+            'factures' => [
+                ['id' => 101, 'montant' => 1500, 'date' => '2024-05-10'],
+                ['id' => 102, 'montant' => 2300, 'date' => '2024-06-15'],
+            ]
+        ];
 
-        return $this->render('facture/factures.html.twig');
+        return $this->render('page/clients/view.html.twig', [
+            'client' => $client
+        ]);
     }
 }

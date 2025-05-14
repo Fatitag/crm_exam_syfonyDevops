@@ -8,3 +8,6 @@ app_login:
 app_dashboard:
     path: /dashboard
     controller: App\Controller\PageController::dashboard
+facture_add:
+    path: /facture/add
+    controller: App\Controller\FactureController::add

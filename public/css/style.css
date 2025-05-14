@@ -24,6 +24,18 @@ footer {
     font-size: 0.9rem;
     color: #777;
 }
+body {
+    background-color: #f8f9fa;
+}
+
+h1 {
+    color: #4e73df;
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
 
 /* Logo and Title */
 h1 {

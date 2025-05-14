@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client: {{ client.nom }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2>Client: {{ client.nom }} {{ client.prenom }}</h2>
+        <p><strong>Company Name:</strong> {{ client.raison_sociale }}</p>
+        <p><strong>Phone Number:</strong> {{ client.telephone }}</p>
+        <p><strong>Address:</strong> {{ client.adresse }}</p>
+        <p><strong>City:</strong> {{ client.ville }}</p>
+        <p><strong>Country:</strong> {{ client.pays }}</p>
+
+        <hr>
+
+        <h3>Invoices:</h3>
+        {% if client.factures is not empty %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for facture in client.factures %}
+                        <tr>
+                            <td>{{ facture.id }}</td>
+                            <td>{{ facture.montant }}</td>
+                            <td>{{ facture.date|date('Y-m-d') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No invoices found for this client.</p>
+        {% endif %}
+    </div>
+{% endblock %}
