@@ -3,8 +3,10 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-    <div class="text-center mt-4" style="border-radius: 0.5rem;">
-        <h1 class="mb-4" style="color: #1689b9;">Welcome, User!</h1>
-        <p style="color: #0a507c;">Use the navigation bar to access clients and invoices.</p>
+    <div class="text-center mt-4" style="border-radius: 0.5rem; color: #0a507c;">
+        <h1 class="mb-4" style="color: #1689b9;">Bienvenue sur le Dashboard</h1>
+
+        <p>Vous êtes connecté en tant que <strong>{{ app.user.email }}</strong></p>
+
     </div>
 {% endblock %}

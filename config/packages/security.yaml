@@ -1,14 +1,41 @@
 security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
-            security: false
+            lazy: true
+            provider: app_user_provider
+            entry_point: form_login
+
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                username_parameter: email
+                password_parameter: password
+                default_target_path: app_dashboard
+
+            logout:
+                path: app_logout
+                target: app_login
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/dashboard, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/clients, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/factures, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/logout$, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER }

@@ -21,7 +21,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copier le projet Symfony dans l'image
-COPY crm_exam/ ./
+# COPY crm_exam/ ./
 
 # Installer les dépendances PHP (sans les dépendances dev)
 RUN composer install --no-dev --optimize-autoloader || true
