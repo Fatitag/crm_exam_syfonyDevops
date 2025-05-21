@@ -2,117 +2,112 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Client;
+use App\Form\ClientType;
 
 class ClientsController extends AbstractController
 {
     #[Route('/clients', name: 'clients')]
-    public function index(): Response
+    public function index(EntityManagerInterface $em): Response
     {
-        $clients = [
-            [
-                'id' => 1,
-                'nom' => 'John',
-                'prenom' => 'Doe',
-                'raison_sociale' => 'Acme Corp',
-                'telephone' => '0123456789',
-                'adresse' => '123 Rue Principale',
-                'ville' => 'Oujda',
-                'pays' => 'Maroc',
-                'factures' => [
-                    ['id' => 101, 'montant' => 1500, 'date' => '2024-05-10'],
-                    ['id' => 102, 'montant' => 2300, 'date' => '2024-06-15'],
-                ]
-            ],
-            [
-                'id' => 2,
-                'nom' => 'Jane',
-                'prenom' => 'Smith',
-                'raison_sociale' => 'Smith Enterprises',
-                'telephone' => '0987654321',
-                'adresse' => '456 Rue Exemple',
-                'ville' => 'Oujda',
-                'pays' => 'Maroc',
-                'factures' => [
-                    ['id' => 103, 'montant' => 1800, 'date' => '2024-05-20'],
-                    ['id' => 104, 'montant' => 2500, 'date' => '2024-07-01'],
-                ]
-            ],
-        ];
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('you should login to see your clients!.');
+        }
+
+        $clients = $em->getRepository(Client::class)->findBy(['user' => $user]);
 
         return $this->render('page/clients/index.html.twig', [
-            'clients' => $clients
+            'clients' => $clients,
         ]);
     }
 
-    #[Route('/clients/add', name: 'client_add')]
-    public function add(): Response
+    #[Route('/clients/new', name: 'client_new')]
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
-        return $this->render('page/clients/add.html.twig');
+        $client = new Client();
+        $form = $this->createForm(ClientType::class, $client);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $client->setUser($this->getUser());
+            $em->persist($client);
+            $em->flush();
+
+            $this->addFlash('success', 'Client added with success !');
+
+            return $this->redirectToRoute('clients');
+        }
+
+        return $this->render('page/clients/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    #[Route('/client/{id}/edit', name: 'client_edit')]
-    public function edit(Request $request, $id): Response
+    #[Route('/clients/{id}', name: 'client_view')]
+public function view(Client $client): Response
+{
+    if ($client->getUser() !== $this->getUser()) {
+        throw $this->createAccessDeniedException('you can not access to this client.');
+    }
+
+    $factures = $client->getFactures(); 
+
+    return $this->render('page/clients/view.html.twig', [
+        'client' => $client,
+        'factures' => $factures,
+    ]);
+}
+
+
+    #[Route('/clients/{id}/edit', name: 'client_edit')]
+    public function edit(Request $request, Client $client, EntityManagerInterface $em): Response
     {
-        $client = [
-            'id' => $id,
-            'nom' => 'Dupont',
-            'prenom' => 'Jean',
-            'raison_sociale' => 'Entreprise Dupont SARL',
-            'telephone' => '0600123456',
-            'adresse' => '12 rue des Lilas',
-            'ville' => 'Oujda',
-            'pays' => 'Maroc',
-        ];
+        if ($client->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('you can not modify this client.');
+        }
 
-        if ($request->isMethod('POST')) {
-            $client['nom'] = $request->request->get('nom');
-            $client['prenom'] = $request->request->get('prenom');
-            $client['raison_sociale'] = $request->request->get('raison_sociale');
-            $client['telephone'] = $request->request->get('telephone');
-            $client['adresse'] = $request->request->get('adresse');
-            $client['ville'] = $request->request->get('ville');
-            $client['pays'] = $request->request->get('pays');
+        $form = $this->createForm(ClientType::class, $client);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
 
-            $this->addFlash('success', 'Client updated successfully!');
+            $this->addFlash('success', 'Client updated with success !');
+
             return $this->redirectToRoute('clients');
         }
 
         return $this->render('page/clients/edit.html.twig', [
-            'client' => $client
+            'form' => $form->createView(),
+            'client' => $client,
         ]);
     }
 
-    #[Route('/client/{id}/delete', name: 'client_delete')]
-    public function delete($id): Response
+    #[Route('/clients/{id}/delete', name: 'client_delete', methods: ['POST', 'GET'])]
+    public function delete(Request $request, int $id, EntityManagerInterface $em): RedirectResponse
     {
-        $this->addFlash('success', 'Client deleted successfully!');
+        $client = $em->getRepository(Client::class)->find($id);
+
+        if (!$client) {
+            throw $this->createNotFoundException('Client non trouvé.');
+        }
+
+        if ($client->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('you can not delete this client.');
+        }
+
+        $em->remove($client);
+        $em->flush();
+
+        $this->addFlash('success', 'Client deleted with success !');
+
         return $this->redirectToRoute('clients');
-    }
-
-    #[Route('/client/{id}', name: 'client_view')]
-    public function view($id): Response
-    {
-        $client = [
-            'id' => $id,
-            'nom' => 'Dupont',
-            'prenom' => 'Jean',
-            'raison_sociale' => 'Entreprise Dupont SARL',
-            'telephone' => '0600123456',
-            'adresse' => '12 rue des Lilas',
-            'ville' => 'Oujda',
-            'pays' => 'Maroc',
-            'factures' => [
-                ['id' => 101, 'montant' => 1500, 'date' => '2024-05-10'],
-                ['id' => 102, 'montant' => 2300, 'date' => '2024-06-15'],
-            ]
-        ];
-
-        return $this->render('page/clients/view.html.twig', [
-            'client' => $client
-        ]);
     }
 }

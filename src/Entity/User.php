@@ -39,10 +39,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): self { $this->lastName = $lastName; return $this; }
 
     public function eraseCredentials(): void {
-        // Clear sensitive data if needed
     }
 
     public function getRoles(): array {
-        return ['ROLE_USER']; // ou roles stockés en BD
+        return ['ROLE_USER']; 
     }
 }

@@ -1,40 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Client: {{ client.nom }}{% endblock %}
+{% block title %}Client: {{ client.gerantNom }}{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h2>Client: {{ client.nom }} {{ client.prenom }}</h2>
-        <p><strong>Company Name:</strong> {{ client.raison_sociale }}</p>
-        <p><strong>Phone Number:</strong> {{ client.telephone }}</p>
-        <p><strong>Address:</strong> {{ client.adresse }}</p>
-        <p><strong>City:</strong> {{ client.ville }}</p>
-        <p><strong>Country:</strong> {{ client.pays }}</p>
+<div class="container mt-5">
+    <h2>Client Information</h2>
+    <ul>
+        <li><strong>Manager Name:</strong> {{ client.gerantNom }}</li>
+        <li><strong>Company:</strong> {{ client.raisonSociale }}</li>
+        <li><strong>Phone:</strong> {{ client.telephone }}</li>
+        <li><strong>Address:</strong> {{ client.adresse }}</li>
+        <li><strong>City:</strong> {{ client.ville }}</li>
+        <li><strong>Country:</strong> {{ client.pays }}</li>
+    </ul>
 
-        <hr>
+    <hr>
 
-        <h3>Invoices:</h3>
-        {% if client.factures is not empty %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Invoice ID</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for facture in client.factures %}
-                        <tr>
-                            <td>{{ facture.id }}</td>
-                            <td>{{ facture.montant }}</td>
-                            <td>{{ facture.date|date('Y-m-d') }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <h3>Invoices</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Date</th>
+                <th>Amount (DH)</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for facture in factures %}
+            <tr>
+                <td>{{ facture.id }}</td>
+                <td>{{ facture.date|date('d/m/Y') }}</td>
+                <td>{{ facture.montant }}</td>
+                <td>{{ facture.statut|capitalize }}</td>
+                <td>
+    <a href="{{ path('facture_edit', { id: facture.id }) }}" class="btn btn-sm" style="background-color: #1689b9; color: white;" title="Edit">
+        <i class="bi bi-pencil"></i>
+    </a>
+    <form method="post" action="{{ path('facture_delete', {'id': facture.id}) }}" onsubmit="return confirm('Are you sure you want to delete this invoice?');" style="display:inline;">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ facture.id) }}">
+        <button type="submit" class="btn btn-sm" style="background-color: #0a507c; color: white;" title="Delete">
+            <i class="bi bi-trash"></i>
+        </button>
+    </form>
+</td>
+            </tr>
         {% else %}
-            <p>No invoices found for this client.</p>
-        {% endif %}
-    </div>
+            <tr><td colspan="5">No invoices found for this client.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+<a href="{{ path('facture_new', { clientId: client.id }) }}" class="btn btn-sm" style="background-color: #1689b9; color: white;">
+    <i class="bi bi-plus-circle"></i> Add Invoice
+</a></div>
 {% endblock %}

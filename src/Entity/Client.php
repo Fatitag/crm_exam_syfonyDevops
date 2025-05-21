@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: ClientRepository::class)]
+#[ORM\Entity]
 class Client
 {
     #[ORM\Id]
@@ -47,6 +46,22 @@ class Client
     #[ORM\ManyToOne(inversedBy: 'clients')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+
+    #[ORM\Column(length: 100)]
+#[Assert\NotBlank(message: "Le prénom du gérant est requis.")]
+private ?string $gerantPrenom = null;
+
+public function getGerantPrenom(): ?string
+{
+    return $this->gerantPrenom;
+}
+
+public function setGerantPrenom(string $gerantPrenom): static
+{
+    $this->gerantPrenom = $gerantPrenom;
+    return $this;
+}
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Facture::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $factures;

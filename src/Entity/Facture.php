@@ -36,6 +36,14 @@ class Facture
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
+    #[ORM\Column(type: "text", nullable: true)]
+    #[Assert\Length(
+        max: 500,
+        maxMessage: "La note ne peut pas dépasser {{ limit }} caractères."
+    )]
+    private ?string $note = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -82,6 +90,16 @@ class Facture
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+        return $this;
+    }
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): static
+    {
+        $this->note = $note;
         return $this;
     }
 }

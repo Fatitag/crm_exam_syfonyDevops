@@ -4,10 +4,6 @@ home:
 app_login:
     path: /login
     controller: App\Controller\SecurityController::login
-
-app_dashboard:
-    path: /dashboard
-    controller: App\Controller\PageController::dashboard
 facture_add:
     path: /facture/add
     controller: App\Controller\FactureController::add

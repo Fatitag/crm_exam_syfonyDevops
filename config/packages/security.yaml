@@ -24,7 +24,7 @@ security:
                 check_path: app_login
                 username_parameter: email
                 password_parameter: password
-                default_target_path: app_dashboard
+                default_target_path: app_clients
 
             logout:
                 path: app_logout
@@ -39,3 +39,4 @@ security:
         - { path: ^/login$, roles: PUBLIC_ACCESS }
         - { path: ^/logout$, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }
+        - { path: ^/clients/add, roles: ROLE_USER }

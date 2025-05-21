@@ -4,38 +4,39 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h2 style="color: #1689b9;" class="mb-4"><i class="bi bi-plus-circle"></i> New Invoice</h2>
+    <h2 style="color: #1689b9;" class="mb-4 text-center">
+     New Invoice
+    </h2>
 
-    <div class="card p-4 shadow">
-        <form method="post" action="{{ path('facture_add') }}">
+    <div class="card p-4 shadow" style="max-width: 600px; margin: 0 auto;">
+        {{ form_start(form) }}
             <div class="mb-3">
-                <label for="numero" class="form-label" style="color: #1689b9;">Invoice Number</label>
-                <input type="text" id="numero" name="numero" class="form-control" required>
+                <label for="{{ form.date.vars.id }}" class="form-label" style="color: #1689b9;">Date</label>
+                {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.date) }}
             </div>
             <div class="mb-3">
-                <label for="date" class="form-label" style="color: #1689b9;">Date</label>
-                <input type="date" id="date" name="date" class="form-control" required>
+                <label for="{{ form.montant.vars.id }}" class="form-label" style="color: #1689b9;">Amount</label>
+                {{ form_widget(form.montant, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.montant) }}
             </div>
             <div class="mb-3">
-                <label for="amount" class="form-label" style="color: #1689b9;">Amount (MAD)</label>
-                <input type="number" id="amount" name="amount" class="form-control" required>
+                <label for="{{ form.statut.vars.id }}" class="form-label" style="color: #1689b9;">Status</label>
+                {{ form_widget(form.statut, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.statut) }}
             </div>
             <div class="mb-3">
-                <label for="etat" class="form-label" style="color: #1689b9;">Status</label>
-                <select id="etat" name="etat" class="form-select" required>
-                    <option value="payee">Paid</option>
-                    <option value="partiellement">Partially Paid</option>
-                    <option value="non_payee">Unpaid</option>
-                </select>
+                <label for="{{ form.note.vars.id }}" class="form-label" style="color: #1689b9;">Note</label>
+                {{ form_widget(form.note, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.note) }}
             </div>
-            <div class="mb-3">
-                <label for="note" class="form-label" style="color: #1689b9;">Note</label>
-                <textarea id="note" name="note" class="form-control"></textarea>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn" style="background-color: #1689b9; color: white;">
+                    <i class="bi bi-save"></i> Save
+                </button>
             </div>
-            <button type="submit" class="btn" style="background-color: #1689b9; color: white;">
-                <i class="bi bi-save"></i> Save
-            </button>
-        </form>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}
